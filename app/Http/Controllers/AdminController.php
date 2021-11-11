@@ -8,11 +8,10 @@ class AdminController extends Controller
 {
     public function index(){
         if(auth()->check()){
-            if(auth()->user()->rol= 'admin'){
-                return 'Admin';
+            if(auth()->user()->rol== 'admin'){
+                return view('admin.index');
             }
         }
-        return
        
     }//
 }

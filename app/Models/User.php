@@ -17,6 +17,7 @@ class User extends Authenticatable
      *
      * @var string[]
      */
+    protected $primarykey='id';
     protected $fillable = [
         'name',
         'email',
@@ -25,6 +26,7 @@ class User extends Authenticatable
         'cedula',
         'f_nacimiento',
         'cod_ciudad',
+        'rol',
     ];
 
     /**

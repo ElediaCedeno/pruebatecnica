@@ -20,8 +20,6 @@
     
     <button type="submit" class="rounded-md bg-indigo-500 w-full text-1g
     text white font-semibold p-2 my-3 hover:bg-indigo-600 focus">Log in</button>
-
 </form>
-</div>
-    
+</div>   
 @endsection    
