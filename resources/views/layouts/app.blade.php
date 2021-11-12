@@ -17,27 +17,46 @@
     </div>
     <ul class="w-1/2 px-16 ml-auto flex justify-end pt-1">
         @if (auth()->check())
-        <li class="mx-8">
-            <p class="text-xl">Bienvenido   <b>{{auth()->user()->name}}</b></p>
-        </li>
-        <li>
-            <a href="{{route('login.destroy')}}" class="font-bold
-            py-2 px-4 rounded-md bg-red-500 hover:bg-red-600 
-            ">Logo out</a>
-        </li>
-        @else
-            <li class="mx-6">
-                <a href="{{route('login.index')}}" class="font-semibold 
-                hover:bg-indigo-700 py-3 px4 rounded-md"> Log in</a>
+            @if (auth()->user()->rol=='admin')
+                <div class=" w-1/2 my-3">
+                    <a class="text-white text-xl " href="{{route('user.store')}}"> ADMINISTRACIÓN DE USUARIOS
+                </div>
+                <div class="my-3">
+                    <a class="text-xl text-white" href="{{route('email.indexadmin')}}"> ADMINISTRACIÓN DE MAILS
+                </div>
+                <div class="my-3">
+                    <a class="text-xl text-white" href="{{route('auth.show')}}"> VER MIS DATOS
+                </div>
+                    <li class="mx-8">
+                        <p class="text-xl">Bienvenido  <b>{{auth()->user()->name}}</b></p>
+                    </li>
+                    <li>
+                        <a href="{{route('login.destroy')}}" class="font-bold
+                        py-2 px-4 rounded-md bg-red-500 hover:bg-red-600 
+                        ">Salir</a>
+                    </li>            
+            @else
+            <div class="">
+                <a class="text-white text-xl" href="{{route('auth.show')}}"> VER DATOS 
+        </div>
+        <div class="">
+            <a  class="text-white text-xl" href="{{route('email.index')}}"> ENVIO DE MAILS
+        </div>
+            <li class="mx-8">
+                <p class="text-xl">Bienvenido   <b>{{auth()->user()->name}}</b></p>
             </li>
             <li>
-                <a href="{{route('register.index')}}" class="font-semibold 
-                border-2 border-white py-2 px4 rounded-md hover:bg-write
-                hover:text-indigo-700"> Register</a>
+                <a href="{{route('login.destroy')}}" class="font-bold
+                py-2 px-4 rounded-md bg-red-500 hover:bg-red-600 
+                ">Salir</a>
+            </li>
+            @endif
+        @else
+            <li class="mx-6">
+                <a class="text-white text-xl" href="{{route('login.index')}}" class="font-semibold 
+                hover:bg-indigo-700 py-3 px4 rounded-md">Iniciar Sesion</a>
             </li>
         @endif
-
-
     </ul>
 </nav>
     @yield('content')    

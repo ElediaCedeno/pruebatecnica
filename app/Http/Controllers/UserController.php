@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+
 use Illuminate\Support\Facades\DB;
-use Illuminate\Pagination\Paginator;
+use Illuminate\Validation\Rules\Password;
+use Carbon\Carbon;
+
 class UserController extends Controller
 {
     /**
@@ -45,23 +48,35 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $this->validate(request(), [
-            'name'=> 'required',
-            'email'=> 'required|email',
-            'password'=> 'required',
-            'celular'=> 'required',
-            'cedula'=> 'required',
+            'name'=> 'required|string|max:100',
+            'email'=> 'required|email|max:150|unique:users',
+            'password'=> ['required', Password::min(8)
+            ->letters()//al menos una letra 
+            ->mixedCase()//al menos una minuscula y una mayuscula
+            ->numbers()//al menos un numero
+            ->symbols()//al menos un simbolo
+            ->uncompromised()
+            ],
+            'celular'=> 'required|max:10',
+            'cedula'=> 'required|max:11',
             'f_nacimiento'=> 'required',
             'cod_ciudad'=> 'required',
          ]); //
-         $user=new User;
-         $user->name=$request->input('name');
-         $user->email=$request->input('email');
-         $user->password=$request->input('password');
-         $user->celular=$request->input('celular');
-         $user->cedula=$request->input('cedula');
-         $user->f_nacimiento=$request->f_nacimiento;
-         $user->cod_ciudad=$request->input('cod_ciudad');
-         $user->save();
+         $edad=Carbon::parse($request->f_nacimiento)->age;
+         if($edad>=18){
+            $user=new User;
+            $user->name=$request->input('name');
+            $user->email=$request->input('email');
+            $user->password=$request->input('password');
+            $user->celular=$request->input('celular');
+            $user->cedula=$request->input('cedula');
+            $user->f_nacimiento=$request->f_nacimiento;
+            $user->cod_ciudad=$request->input('cod_ciudad');
+            $user->rol=$request->input('rol');
+            $user->save();
+         }else{
+             echo "<h1>Usuario no puede registrarse</h1>";
+         }
          return redirect()->route('user.index');
     }
 
@@ -71,9 +86,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
-        //
+        $user=User::findOrFail(auth()->user()->id);
+        return view('auth.show', compact('user'));
     }
 
     /**
@@ -104,6 +120,7 @@ class UserController extends Controller
         $user->celular=$request->input('celular');
         $user->f_nacimiento=$request->f_nacimiento;
         $user->cod_ciudad=$request->input('cod_ciudad');
+        $user->rol=$request->input('rol');
         $user->save();
         return redirect()->route('user.index');
     }
@@ -120,5 +137,4 @@ class UserController extends Controller
         $user->delete();
         return redirect()->route('user.index');//
     }
-
 }

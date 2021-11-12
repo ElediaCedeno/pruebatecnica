@@ -1,3 +1,4 @@
+<?php use Carbon\Carbon;?>
 @extends('layouts.app')
 @section('title', 'Usuario')
     
@@ -51,7 +52,7 @@
                             <th>{{$users->email}}</th>
                             <th>{{$users->celular}}</th>
                             <th>{{$users->cedula}}</th>
-                            <th>{{$users->f_nacimiento}}</th>
+                            <th>{{$age=Carbon::parse($users->f_nacimiento)->age}}</th>
                             <th>{{$users->cod_ciudad}}</th>
                             <th class="center"><a href="{{route('user.edit', $users->id)}}" class="btn btn-warning btn-sm">EDITAR</a>
                                 |<form action="{{route('user.destroy', $users->id)}}" method="POST">
